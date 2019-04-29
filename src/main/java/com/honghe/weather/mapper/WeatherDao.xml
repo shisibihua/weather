@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.honghe.weather.dao.WeatherDao">
+    <select id="searchWeatherContent" resultType="java.lang.String">
+        select distinct f_content as content from t_services_weather
+        where f_city_name=#{cityName}
+    </select>
+
+    <insert id="addWeather" parameterType="java.lang.String">
+        insert into t_services_weather
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="city!=null and city!=''">
+                f_city_name,
+            </if>
+            <if test="weather!=null and weather!=''">
+                f_content,
+            </if>
+            <if test="time!=null and time!=''">
+                f_time,
+            </if>
+        </trim>
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="city!=null and city!=''">
+                #{city},
+            </if>
+            <if test="weather!=null and weather!=''">
+               #{weather},
+            </if>
+            <if test="time!=null and time!=''">
+                #{time},
+            </if>
+        </trim>
+    </insert>
+    <update id="updWeather" parameterType="java.lang.String">
+        update t_services_weather
+        <set>
+            <if test="city!=null and city!=''">
+                f_city_name=#{city},
+            </if>
+            <if test="weather!=null and weather!=''">
+                f_content=#{weather},
+            </if>
+            <if test="time!=null and time!=''">
+                f_time=#{time},
+            </if>
+        </set>
+        where f_city_name=#{city}
+    </update>
+    <delete id="clearWeather">
+        delete from t_services_weather
+    </delete>
+    <select id="searchCityName" resultType="java.lang.String">
+        select DISTINCT f_city_name as cityName from t_services_weather
+    </select>
+</mapper>
